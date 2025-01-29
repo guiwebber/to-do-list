@@ -1,45 +1,29 @@
-import fs from "fs";
-import path from "path";
-import { NextRequest, NextResponse } from "next/server";
+// app/api/tasks/[id]/route.ts
 
-// Caminho para o arquivo JSON
-const filePath = path.join(process.cwd(), "data", "list.json");
+import { NextRequest, NextResponse } from 'next/server';
 
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+// Defina o tipo para os parâmetros da rota
+type Params = {
+  id: string;
+};
+
+// Função para excluir uma tarefa baseada no ID
+export async function DELETE(req: NextRequest, { params }: { params: Params }) {
+  // Desestrutura o 'id' de 'params'
+  const { id } = params;
+
+  // Verifique se o ID foi passado
+  if (!id) {
+    return NextResponse.json({ error: 'ID is required' }, { status: 400 });
+  }
+
   try {
-    const { id } = params;  // Não é necessário `await`
+    // Aqui você faria a lógica para deletar a tarefa no banco de dados ou na lista
+    // Exemplo fictício: await deleteTaskById(id);
 
-    console.log("Recebendo DELETE para ID:", id);
-
-    if (!id) {
-      return NextResponse.json({ error: "ID não fornecido" }, { status: 400 });
-    }
-
-    const taskId = Number(id);
-    if (isNaN(taskId)) {
-      return NextResponse.json({ error: "ID inválido" }, { status: 400 });
-    }
-
-    if (!fs.existsSync(filePath)) {
-      console.log("Arquivo não encontrado:", filePath);
-      return NextResponse.json({ error: "Arquivo list.json não encontrado" }, { status: 404 });
-    }
-
-    const tasks = JSON.parse(fs.readFileSync(filePath, "utf-8"));
-    console.log("Tarefas carregadas:", tasks);
-
-    const updatedTasks = tasks.filter((task: { id: number }) => task.id !== taskId);
-
-    if (tasks.length === updatedTasks.length) {
-      return NextResponse.json({ error: "Tarefa não encontrada" }, { status: 404 });
-    }
-
-    // Escreve o arquivo atualizado de volta
-    fs.writeFileSync(filePath, JSON.stringify(updatedTasks, null, 2));
-
-    return NextResponse.json({ message: "Tarefa deletada com sucesso!" }, { status: 200 });
+    // Retorne uma resposta de sucesso após excluir a tarefa
+    return NextResponse.json({ message: `Task with ID ${id} deleted` }, { status: 200 });
   } catch (error) {
-    console.error("Erro ao deletar tarefa:", error);
-    return NextResponse.json({ error: "Erro ao deletar tarefa" }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to delete task' }, { status: 500 });
   }
 }
