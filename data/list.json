@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "titulo": "Comprar leite",
+    "descricao": "Comprar leite e pão na padaria",
+    "prioridade": "alta",
+    "categoria": "pessoal",
+    "data": "2025-01-30"
+  },
+  {
+    "id": 2,
+    "titulo": "Estudar React",
+    "descricao": "Estudar os conceitos básicos de React e Hooks",
+    "prioridade": "media",
+    "categoria": "estudos",
+    "data": "2025-02-01"
+  },
+  {
+    "id": 3,
+    "titulo": "Reunião de trabalho",
+    "descricao": "Reunião com o time de desenvolvimento",
+    "prioridade": "baixa",
+    "categoria": "trabalho",
+    "data": "2025-02-05"
+  },
+  {
+    "id": 1738165361743,
+    "titulo": "teste",
+    "descricao": "teste",
+    "prioridade": "alta",
+    "categoria": "estudos",
+    "data": "2025-01-16"
+  },
+  {
+    "id": 1738165805310,
+    "titulo": "TEST",
+    "descricao": "TEST",
+    "prioridade": "Média prioridade",
+    "categoria": "Estudos",
+    "data": "2025-01-18"
+  }
+]
