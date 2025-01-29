@@ -5,6 +5,8 @@ import Form from "../components/Form";
 import List from "../components/List";
 import logo from "../assets/logo.png";
 
+import '../../app/globals.css'
+
 type Task = {
   id: number;
   titulo: string;
