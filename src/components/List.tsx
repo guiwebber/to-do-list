@@ -1,72 +1,38 @@
-"use client";
 import React from "react";
 
-type Task = {
-  id: number;
-  titulo: string;
-  descricao: string;
-  prioridade: string;
-  categoria: string;
-  data: string;
-};
-
-const formatDate = (dateString: string) => {
-  const date = new Date(dateString);
-  return new Intl.DateTimeFormat("pt-BR").format(date);
-};
-
+// Tipo de dado para as tarefas
 type ListProps = {
-  tasks: Task[];
+  tasks: { id: number; titulo: string; descricao: string; prioridade: string; categoria: string; data: string }[];
   onDeleteTask: (taskId: number) => void;
 };
 
-async function handleDelete(taskId: number, onDeleteTask: (taskId: number) => void) {
-  try {
-    const response = await fetch(`/api/tasks/${taskId}`, {
-      method: "DELETE",
-    });
-
-    if (response.ok) {
-      // Se a API retornar com sucesso, deleta do estado também
-      onDeleteTask(taskId);
-    } else {
-      alert("Erro ao deletar a tarefa");
-    }
-  } catch (error) {
-    console.error("Erro ao tentar deletar a tarefa:", error);
-    alert("Erro ao deletar a tarefa");
-  }
-}
-
-function List({ tasks, onDeleteTask }: ListProps) {
+const List = ({ tasks, onDeleteTask }: ListProps) => {
   return (
-    <div className="bg-zinc-200 p-10 m-10 rounded-lg max-sm:m-1 py-5 px-4">
-      <h2>Tarefas:</h2>
-      <ul>
-        {tasks.map((task) => (
-          <li key={task.id} className="my-3">
-            <h3>{task.titulo}</h3>
-            <p>{task.descricao}</p>
-            <p>
-              <strong>Prioridade:</strong> {task.prioridade}
-            </p>
-            <p>
-              <strong>Categoria:</strong> {task.categoria}
-            </p>
-            <p>
-              <strong>Data:</strong> {formatDate(task.data)}
-            </p>
+    <div className="space-y-4 p-5 max-w-3xl mx-auto">
+      {tasks.length === 0 ? (
+        <p className="text-center text-gray-500">Nenhuma tarefa encontrada.</p>
+      ) : (
+        tasks.map((task) => (
+          <div
+            key={task.id}
+            className="p-4 bg-gray-50 border border-gray-300 rounded-lg shadow-md space-y-2"
+          >
+            <h3 className="text-lg font-semibold text-gray-800">{task.titulo}</h3>
+            <p className="text-sm text-gray-600">{task.descricao}</p>
+            <p className="text-xs text-gray-500">Prioridade: {task.prioridade}</p>
+            <p className="text-xs text-gray-500">Categoria: {task.categoria}</p>
+            <p className="text-xs text-gray-500">Data: {task.data}</p>
             <button
-              onClick={() => handleDelete(task.id, onDeleteTask)}
-              className="bg-red-500 text-white p-2 rounded-md mt-2"
+              onClick={() => onDeleteTask(task.id)}
+              className="mt-3 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-400 transition-colors"
             >
               Deletar
             </button>
-          </li>
-        ))}
-      </ul>
+          </div>
+        ))
+      )}
     </div>
   );
-}
+};
 
 export default List;

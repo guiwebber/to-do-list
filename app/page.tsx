@@ -1,11 +1,9 @@
-// import Login from '../src/pages/Login'
-import HomeList from '../src/pages/HomeList'
-import './globals.css'
-export default function Home() {
+import Home from '../src/components/Home';
+
+export default function Page() {
   return (
-    <div className='h-full w-full'>
-      {/* <Login /> */}
-      <HomeList />
+    <div>
+      <Home />
     </div>
   );
 }

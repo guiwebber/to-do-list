@@ -1,23 +1,58 @@
-import React from "react";
-import "../../app/globals.css";
+'use client'
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 
 function Register() {
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [birthDate, setBirthDate] = useState(""); // Campo para data de nascimento
+  const [fullName, setFullName] = useState(""); // Campo para nome completo
+  const [error, setError] = useState("");
+
+  const handleRegister = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Verifica se o e-mail já está cadastrado
+    const existingUsers = JSON.parse(localStorage.getItem("users") || "[]");
+    if (existingUsers.find((user: { email: string }) => user.email === email)) {
+      setError("Este e-mail já está cadastrado!");
+      return;
+    }
+
+    // Verifica se as senhas coincidem
+    if (password !== confirmPassword) {
+      setError("As senhas não coincidem!");
+      return;
+    }
+
+    // Cria o novo usuário com todos os dados
+    const newUser = { email, password, birthDate, fullName };
+    existingUsers.push(newUser);
+
+    // Salva os usuários no localStorage
+    localStorage.setItem("users", JSON.stringify(existingUsers));
+
+    // Redireciona para a página de login após o cadastro
+    router.push("/Login");
+  };
+
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-        <form className="space-y-6">
+        <form onSubmit={handleRegister} className="space-y-6">
           <div>
-            <label
-              htmlFor="fullName"
-              className="block text-gray-700 font-medium"
-            >
+            <label htmlFor="fullName" className="block text-gray-700 font-medium">
               Nome Completo
             </label>
             <input
               type="text"
               id="fullName"
               placeholder="Digite seu nome completo"
-              className="w-full h-12 p-3 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              className="w-full h-12 p-3 mt-2 border border-gray-300 rounded-md"
             />
           </div>
 
@@ -29,7 +64,9 @@ function Register() {
               type="email"
               id="email"
               placeholder="Digite seu e-mail"
-              className="w-full h-12 p-3 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full h-12 p-3 mt-2 border border-gray-300 rounded-md"
             />
           </div>
 
@@ -44,7 +81,9 @@ function Register() {
               type="password"
               id="password"
               placeholder="Digite sua senha"
-              className="w-full h-12 p-3 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full h-12 p-3 mt-2 border border-gray-300 rounded-md"
             />
           </div>
 
@@ -59,58 +98,33 @@ function Register() {
               type="password"
               id="confirmPassword"
               placeholder="Confirme sua senha"
-              className="w-full h-12 p-3 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              className="w-full h-12 p-3 mt-2 border border-gray-300 rounded-md"
             />
           </div>
 
           <div>
             <label
-              htmlFor="birthdate"
+              htmlFor="birthDate"
               className="block text-gray-700 font-medium"
             >
               Data de Nascimento
             </label>
             <input
               type="date"
-              id="birthdate"
-              className="w-full h-12 p-3 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+              id="birthDate"
+              value={birthDate}
+              onChange={(e) => setBirthDate(e.target.value)}
+              className="w-full h-12 p-3 mt-2 border border-gray-300 rounded-md"
             />
           </div>
 
-          <div>
-            <label htmlFor="gender" className="block text-gray-700 font-medium">
-              Sexo
-            </label>
-            <select
-              id="gender"
-              className="w-full h-12 p-3 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-            >
-              <option value="" disabled selected>
-                Selecione
-              </option>
-              <option value="male">Masculino</option>
-              <option value="female">Feminino</option>
-              <option value="other">Outro</option>
-            </select>
-          </div>
-
-          <div className="flex items-center">
-            <input
-              type="checkbox"
-              id="terms"
-              className="h-4 w-4 text-green-500 focus:ring-green-500 border-gray-300 rounded"
-            />
-            <label htmlFor="terms" className="ml-2 text-gray-700">
-              Eu concordo com os{" "}
-              <a href="#" className="text-green-500 underline">
-                Termos de Privacidade
-              </a>
-            </label>
-          </div>
+          {error && <p className="text-red-500 text-sm">{error}</p>}
 
           <button
             type="submit"
-            className="w-full h-12 bg-green-500 text-white font-semibold rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="w-full h-12 bg-green-500 text-white font-semibold rounded-md hover:bg-green-600"
           >
             Cadastre-se
           </button>

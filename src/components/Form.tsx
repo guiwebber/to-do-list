@@ -7,6 +7,7 @@ type TaskInput = {
   prioridade: string;
   categoria: string;
   data: string;
+  userEmail: string; // Adicionando o campo userEmail
 };
 
 type FormProps = {
@@ -29,7 +30,15 @@ function Form({ onAddTask }: FormProps) {
       return;
     }
 
-    onAddTask({ titulo, descricao, prioridade, categoria, data });
+    // Recupera o email do usuário logado
+    const loggedInUser = localStorage.getItem("loggedInUser");
+    if (!loggedInUser) {
+      alert("Você precisa estar logado para adicionar uma tarefa.");
+      return;
+    }
+
+    // Adiciona o userEmail à tarefa
+    onAddTask({ titulo, descricao, prioridade, categoria, data, userEmail: loggedInUser });
 
     setTitulo("");
     setDescricao("");
